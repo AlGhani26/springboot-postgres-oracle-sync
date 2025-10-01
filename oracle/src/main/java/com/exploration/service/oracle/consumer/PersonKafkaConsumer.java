@@ -17,15 +17,20 @@ public class PersonKafkaConsumer {
 
     @KafkaListener(topics = "${kafka.topic}", groupId = "service-oracle")
     public void consume(PersonEvent event) {
-        // ignore self-originated events
-        if ("oracle".equals(event.source()))
+        // Abaikan event yang berasal dari Oracle sendiri
+        if ("oracle".equals(event.source())) {
             return;
+        }
 
         Person p = repo.findById(event.id()).orElse(new Person());
+        // WAJIB set ID manual (karena @GeneratedValue sudah dihapus)
         p.setId(event.id());
         p.setName(event.name());
         p.setEmail(event.email());
         p.setUpdatedAt(event.updatedAt());
-        repo.save(p);
+
+        repo.saveAndFlush(p);
     }
 }
+
+
