@@ -1,0 +1,29 @@
+server:
+  port: 8082
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@//localhost:1521/FREE
+    username: system
+    password: 12345
+    driver-class-name: oracle.jdbc.OracleDriver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: service-oracle
+      auto-offset-reset: earliest
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.value.default.type: com.exploration.service.oracle.dto.PersonEvent
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+
+kafka:
+  topic: person2-sync
+    
