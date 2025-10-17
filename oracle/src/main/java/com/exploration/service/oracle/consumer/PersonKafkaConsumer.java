@@ -22,8 +22,12 @@ public class PersonKafkaConsumer {
             return;
         }
 
+        if ("DELETE".equalsIgnoreCase(event.operationType())) {
+            repo.deleteById(event.id());
+            return;
+        }
+
         Person p = repo.findById(event.id()).orElse(new Person());
-        // WAJIB set ID manual (karena @GeneratedValue sudah dihapus)
         p.setId(event.id());
         p.setName(event.name());
         p.setEmail(event.email());
@@ -32,5 +36,3 @@ public class PersonKafkaConsumer {
         repo.saveAndFlush(p);
     }
 }
-
-

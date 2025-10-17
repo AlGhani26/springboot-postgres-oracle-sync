@@ -2,13 +2,8 @@ package com.exploration.service.postgres.controller;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.exploration.service.postgres.entity.Person;
 import com.exploration.service.postgres.repository.PersonRepository;
@@ -26,14 +21,24 @@ public class PersonController {
     }
 
     @GetMapping
-    public List<Person> all(){ return repo.findAll(); }
+    public List<Person> all() {
+        return repo.findAll();
+    }
 
     @PostMapping
-    public Person create(@RequestBody Person p){ return service.createOrUpdate(p); }
+    public Person create(@RequestBody Person p) {
+        return service.createOrUpdate(p);
+    }
 
     @PutMapping("/{id}")
-    public Person update(@PathVariable Long id, @RequestBody Person p){
+    public Person update(@PathVariable String id, @RequestBody Person p) {
         p.setId(id);
         return service.createOrUpdate(p);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

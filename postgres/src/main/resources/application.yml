@@ -25,6 +25,6 @@ spring:
       properties:
         spring.json.add.type.headers: false
 kafka:
-  topic: person2-sync
+  topic: sync-person-topic
 
   

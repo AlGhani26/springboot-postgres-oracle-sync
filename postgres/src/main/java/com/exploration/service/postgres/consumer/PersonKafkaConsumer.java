@@ -22,8 +22,12 @@ public class PersonKafkaConsumer {
             return;
         }
 
+        if ("DELETE".equalsIgnoreCase(event.operationType())) {
+            repo.deleteById(event.id());
+            return;
+        }
+
         Person p = repo.findById(event.id()).orElse(new Person());
-        // WAJIB set ID manual juga di Postgres
         p.setId(event.id());
         p.setName(event.name());
         p.setEmail(event.email());
